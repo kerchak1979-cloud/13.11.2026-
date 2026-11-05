@@ -8,1049 +8,1767 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --synergy-navy: #0A2B5C;
-    --synergy-blue: #1E5BA8;
-    --synergy-light-blue: #E8F0FA;
-    --synergy-yellow: #FFC72C;
-    --synergy-gray: #F5F7FA;
-    --text-dark: #1a2332;
-    --text-muted: #5d6d7e;
+    --navy: #0A2B5C;
+    --blue: #1E5BA8;
+    --light: #E8F0FA;
+    --yellow: #FFC72C;
+    --gray: #F5F7FA;
+    --text: #1a2332;
+    --muted: #5d6d7e;
     --danger: #B03A2E;
   }
 
+  html, body { height: 100%; }
   body {
     font-family: 'Segoe UI', 'PT Sans', Roboto, Arial, sans-serif;
-    background: #EDF2F7;
-    color: var(--text-dark);
-    font-size: 20px;
-    line-height: 1.65;
-    padding: 30px 20px;
-  }
-
-  .document {
-    max-width: 1180px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(10, 43, 92, 0.12);
+    background: #0d1b2a;
+    color: var(--text);
     overflow: hidden;
+    line-height: 1.45;
   }
 
-  /* ===== ШАПКА ===== */
-  .header {
-    background: linear-gradient(135deg, var(--synergy-navy) 0%, var(--synergy-blue) 100%);
+  .deck {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stage {
+    width: 1600px;
+    height: 900px;
+    position: relative;
+    transform-origin: center center;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  }
+
+  /* ===== СЛАЙД ===== */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    grid-template-rows: auto 1fr auto;
+    background: #fff;
+  }
+  .slide.active { display: grid; animation: fade 0.28s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ===== ШАПКА СЛАЙДА ===== */
+  .slide-header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
     color: #fff;
-    padding: 44px 54px 40px;
+    padding: 22px 54px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
     position: relative;
     overflow: hidden;
   }
-  .header::after {
+  .slide-header::after {
     content: '';
     position: absolute;
-    top: -60px; right: -60px;
-    width: 220px; height: 220px;
-    background: var(--synergy-yellow);
-    border-radius: 50%;
-    opacity: 0.15;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--yellow);
   }
-  .header::before {
+  .slide-header::before {
     content: '';
     position: absolute;
-    bottom: -80px; right: 80px;
-    width: 160px; height: 160px;
-    background: #fff;
+    top: -70px; right: 90px;
+    width: 190px; height: 190px;
+    background: var(--yellow);
     border-radius: 50%;
-    opacity: 0.06;
+    opacity: 0.13;
   }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 22px;
-    position: relative; z-index: 1;
-  }
-  .brand-logo {
-    width: 60px; height: 60px;
-    background: var(--synergy-yellow);
-    border-radius: 13px;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 1.7em; color: var(--synergy-navy);
-    box-shadow: 0 6px 20px rgba(255, 199, 44, 0.4);
-  }
-  .brand-name {
-    font-size: 1.4em;
+  .header-left { position: relative; z-index: 1; flex: 1; min-width: 0; }
+  .slide-number {
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-  .brand-name small {
-    display: block;
-    font-size: 0.62em;
-    font-weight: 400;
-    opacity: 0.85;
+    color: var(--yellow);
     letter-spacing: 2px;
     text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .slide-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #fff;
+  }
+  .header-mark {
+    position: relative; z-index: 1;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 40px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ===== КОНТЕНТ ===== */
+  .slide-content {
+    padding: 30px 54px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 16px;
+    overflow: hidden;
+    font-size: 22px;
+    min-height: 0;
+  }
+  .slide-content.center { justify-content: center; align-items: center; text-align: center; }
+  .slide-content > * { flex-shrink: 0; }
+
+  /* ===== ПОДВАЛ ===== */
+  .slide-footer {
+    background: var(--gray);
+    border-top: 1px solid #E1E8F0;
+    padding: 12px 54px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+  }
+  .slide-footer strong { color: var(--navy); font-weight: 600; }
+
+  /* ===== HERO (титул + финал) ===== */
+  .slide.hero {
+    grid-template-rows: 1fr;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: #fff;
+  }
+  .slide.hero::before {
+    content: '';
+    position: absolute;
+    top: -180px; right: -140px;
+    width: 520px; height: 520px;
+    background: var(--yellow);
+    border-radius: 50%;
+    opacity: 0.14;
+  }
+  .slide.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -220px; left: -180px;
+    width: 480px; height: 480px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.05;
+  }
+  .hero-inner {
+    position: relative; z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 90px;
+    gap: 26px;
+    height: 100%;
+  }
+  .hero-center { align-items: center; text-align: center; }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-logo {
+    width: 64px; height: 64px;
+    background: var(--yellow);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 32px; color: var(--navy);
+    box-shadow: 0 8px 24px rgba(255, 199, 44, 0.35);
+  }
+  .brand-name { font-size: 21px; font-weight: 700; letter-spacing: 0.5px; }
+  .brand-name small {
+    display: block; font-size: 11px; font-weight: 400;
+    opacity: 0.8; letter-spacing: 2.5px; text-transform: uppercase;
     margin-top: 3px;
   }
-  .header h1 {
-    font-size: 2em;
-    font-weight: 700;
-    margin-bottom: 10px;
-    position: relative; z-index: 1;
-    line-height: 1.28;
-  }
-  .header p {
-    font-size: 1.15em;
-    opacity: 0.92;
-    position: relative; z-index: 1;
-  }
-  .badge {
+
+  .hero h1 { font-size: 46px; font-weight: 700; line-height: 1.13; max-width: 1400px; }
+  .hero .subtitle { font-size: 22px; opacity: 0.9; }
+  .hero .badge {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.14);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 8px 20px;
-    border-radius: 20px;
-    font-size: 0.95em;
-    margin-top: 16px;
-    position: relative; z-index: 1;
+    border-radius: 40px;
+    padding: 10px 24px;
+    font-size: 17px;
     letter-spacing: 0.5px;
+    align-self: flex-start;
+  }
+  .hero-center .badge { align-self: center; }
+
+  /* ===== ТИПОГРАФИКА ===== */
+  .slide-content p { margin: 0; }
+  .slide-content h3 {
+    font-size: 24px;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+  .slide-content ul, .slide-content ol { margin-left: 26px; }
+  .slide-content li { margin-bottom: 8px; }
+  .slide-content li:last-child { margin-bottom: 0; }
+  .slide-content strong { color: var(--navy); }
+  .slide-content code {
+    background: var(--light);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-family: 'Consolas', 'Menlo', monospace;
   }
 
-  /* ===== СЛАЙДЫ ===== */
-  .slide {
-    padding: 44px 54px 48px;
-    border-bottom: 4px solid var(--synergy-yellow);
-    page-break-inside: avoid;
-  }
-  .slide:last-child { border-bottom: none; }
+  /* ===== КАРТОЧКИ-ПУНКТЫ ===== */
+  .point-grid { display: grid; gap: 16px; }
+  .point-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .point-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .point-grid.cols-auto { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 
-  .slide-number {
-    font-size: 0.85em;
-    font-weight: 700;
-    color: var(--synergy-blue);
-    letter-spacing: 1.5px;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-  }
-  .slide h2 {
-    font-size: 1.6em;
-    color: var(--synergy-navy);
-    margin-bottom: 16px;
-    line-height: 1.3;
-  }
-  .slide h3 {
-    font-size: 1.2em;
-    color: var(--synergy-blue);
-    margin: 20px 0 10px;
-  }
-  .slide p {
-    margin-bottom: 12px;
-  }
-  .slide ul, .slide ol {
-    margin: 10px 0 14px 26px;
-  }
-  .slide li {
-    margin-bottom: 7px;
-  }
-
-  /* ===== КАРТОЧКИ / БЛОКИ ===== */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  .point {
+    background: var(--gray);
+    border-left: 5px solid var(--blue);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex;
     gap: 18px;
-    margin: 16px 0;
+    align-items: center;
   }
+  .point-icon {
+    flex-shrink: 0;
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+  }
+  .point-body { flex: 1; min-width: 0; }
+  .point-body h4 {
+    font-size: 19px;
+    color: var(--navy);
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .point-body p { font-size: 16px; color: var(--muted); }
+
+  /* ===== КАРТОЧКИ ===== */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
   .card {
     background: #fff;
     border: 2px solid #E1E8F0;
     border-radius: 14px;
-    padding: 20px 18px;
-    transition: border-color 0.25s;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
-  .card:hover { border-color: var(--synergy-blue); }
-  .card h4 {
-    font-size: 1.05em;
-    color: var(--synergy-navy);
-    margin-bottom: 8px;
-  }
-  .card p, .card li {
-    font-size: 1em;
-    color: var(--text-muted);
-  }
+  .card h4 { font-size: 19px; color: var(--navy); margin-bottom: 6px; }
+  .card p { font-size: 16px; color: var(--muted); }
+  .card.danger { border-color: var(--danger); }
+  .card.danger h4 { color: var(--danger); }
 
+  /* ===== ДВЕ КОЛОНКИ ===== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+    height: 100%;
+  }
+  .two-col > div { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ===== SPLIT-2 (большие карточки пополам) ===== */
+  .split-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    height: 100%;
+  }
+  .split-card {
+    background: linear-gradient(135deg, var(--light) 0%, #fff 100%);
+    border: 2px solid var(--blue);
+    border-radius: 16px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .split-card h3 {
+    font-size: 30px;
+    color: var(--navy);
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 4px solid var(--yellow);
+    align-self: flex-start;
+  }
+  .split-card p { font-size: 21px; color: var(--text); }
+
+  /* ===== ТАЙМЛАЙН (даты) ===== */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .timeline.cols-2 { grid-template-columns: 1fr 1fr; }
+  .tl-item {
+    background: var(--gray);
+    border-radius: 14px;
+    padding: 26px 22px;
+    border-top: 5px solid var(--yellow);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .tl-date {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .tl-desc { font-size: 17px; color: var(--text); }
+
+  /* ===== СХЕМЫ ===== */
   .scheme {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
-    margin: 18px 0;
-    padding: 16px;
-    background: var(--synergy-light-blue);
+    justify-content: center;
+    gap: 14px;
+    padding: 22px;
+    background: var(--light);
     border-radius: 14px;
-    font-size: 1.05em;
   }
   .scheme .node {
     background: #fff;
-    border: 2px solid var(--synergy-blue);
+    border: 2px solid var(--blue);
     border-radius: 10px;
-    padding: 10px 18px;
+    padding: 12px 22px;
     font-weight: 600;
-    color: var(--synergy-navy);
+    color: var(--navy);
     text-align: center;
+    font-size: 18px;
   }
-  .scheme .arrow {
-    font-size: 1.4em;
-    color: var(--synergy-blue);
-    font-weight: 700;
-  }
+  .scheme .arrow { font-size: 24px; color: var(--blue); font-weight: 700; }
+  .scheme-col { flex-direction: column; align-items: stretch; gap: 6px; }
+  .scheme-col .node { width: 100%; }
+  .scheme-col .arrow { text-align: center; font-size: 20px; }
 
+  /* ===== ВЫДЕЛЕНИЯ ===== */
   .highlight {
     background: #FFF6DA;
-    border-left: 5px solid var(--synergy-yellow);
-    padding: 14px 18px;
-    border-radius: 8px;
-    margin: 14px 0;
-    font-size: 1.05em;
+    border-left: 5px solid var(--yellow);
+    padding: 16px 22px;
+    border-radius: 10px;
+    font-size: 18px;
   }
   .warning {
     background: #FDEDEC;
     border-left: 5px solid var(--danger);
-    padding: 14px 18px;
-    border-radius: 8px;
-    margin: 14px 0;
-    font-size: 1.05em;
-    color: var(--danger);
+    padding: 16px 22px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #8B2E24;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0;
-    font-size: 1em;
-  }
+  /* ===== ТАБЛИЦА ===== */
+  table { width: 100%; border-collapse: collapse; font-size: 18px; }
   th {
-    background: var(--synergy-navy);
+    background: var(--navy);
     color: #fff;
-    padding: 12px 10px;
+    padding: 14px 18px;
     text-align: left;
     font-weight: 600;
   }
-  td {
-    border-bottom: 1px solid #E1E8F0;
-    padding: 11px 10px;
-  }
-  tr:nth-child(even) td { background: var(--synergy-gray); }
+  td { border-bottom: 1px solid #E1E8F0; padding: 14px 18px; }
+  tr:nth-child(even) td { background: var(--gray); }
+  tr:last-child td { border-bottom: none; }
 
-  .test-question {
-    margin-bottom: 16px;
-    padding: 14px 16px;
-    background: var(--synergy-gray);
-    border-radius: 10px;
-  }
-  .test-question p { margin-bottom: 8px; font-weight: 600; }
-  .test-question ul { list-style: none; margin-left: 0; }
-
-  .footer {
-    background: var(--synergy-gray);
-    padding: 28px 54px;
-    border-top: 1px solid #E1E8F0;
+  /* ===== НУМЕРОВАННЫЙ СПИСОК ===== */
+  .numbered-list {
+    counter-reset: item;
+    list-style: none;
+    margin-left: 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 14px;
-    font-size: 0.95em;
-    color: var(--text-muted);
+    height: 100%;
+    justify-content: space-evenly;
   }
-  .footer .brand-mini {
-    display: flex; align-items: center; gap: 12px;
-    font-weight: 600;
-    color: var(--synergy-navy);
+  .numbered-list li {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--gray);
+    border-left: 5px solid var(--blue);
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 20px;
+    margin: 0;
   }
-  .footer .brand-mini span:first-child {
-    width: 32px; height: 32px;
-    background: var(--synergy-yellow);
-    border-radius: 8px;
+  .numbered-list li::before {
+    counter-increment: item;
+    content: counter(item);
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    background: var(--yellow);
+    border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 800; color: var(--synergy-navy);
-    font-size: 1em;
+    font-weight: 800;
+    color: var(--navy);
+    font-size: 20px;
   }
 
-  @media (max-width: 640px) {
-    body { padding: 14px 10px; font-size: 17px; }
-    .header { padding: 28px 22px; }
-    .header h1 { font-size: 1.5em; }
-    .slide { padding: 26px 22px 30px; }
-    .slide h2 { font-size: 1.35em; }
-    .footer { padding: 22px; }
+  /* ===== ТЕСТ ===== */
+  .test-question {
+    background: var(--gray);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+  .test-question p { font-weight: 700; margin-bottom: 6px; font-size: 17px; color: var(--navy); }
+  .test-question ul { list-style: none; margin-left: 0; font-size: 16px; }
+  .test-question li { margin-bottom: 4px; }
+  .test-list { display: flex; flex-direction: column; gap: 12px; height: 100%; justify-content: space-evenly; }
+
+  /* ===== НАВИГАЦИЯ ===== */
+  .nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 54px; height: 54px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200;
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .nav-btn:hover { background: rgba(255, 255, 255, 0.25); }
+  .nav-prev { left: 16px; }
+  .nav-next { right: 16px; }
+
+  .counter {
+    position: fixed;
+    right: 20px; bottom: 18px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 20px;
+    z-index: 200;
+    pointer-events: none;
   }
 
   @media print {
-    body { background: #fff; padding: 0; }
-    .document { box-shadow: none; border-radius: 0; }
-    .card { page-break-inside: avoid; }
-    .slide { page-break-after: always; border-bottom: none; }
-    .slide:last-child { page-break-after: auto; }
+    body { background: #fff; overflow: visible; }
+    .deck { position: static; display: block; }
+    .stage { width: auto; height: auto; transform: none !important; box-shadow: none; }
+    .slide { position: relative; display: grid !important; page-break-after: always; }
+    .nav-btn, .counter { display: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="document">
+<div class="deck">
+  <div class="stage" id="stage">
 
-  <!-- ================= СЛАЙД 1 ================= -->
-  <div class="header">
-    <div class="brand">
-      <div class="brand-logo">С</div>
-      <div class="brand-name">
-        УНИВЕРСИТЕТ «СИНЕРГИЯ»
-        <small>SYNERGY UNIVERSITY</small>
+  <!-- ===== 1. ТИТУЛ ===== -->
+  <section class="slide hero active">
+    <div class="hero-inner">
+      <div class="brand">
+        <div class="brand-logo">С</div>
+        <div class="brand-name">УНИВЕРСИТЕТ «СИНЕРГИЯ»<small>Synergy University</small></div>
+      </div>
+      <h1>Законодательная база обязательной маркировки товаров. ЭДО. Работа в системе «Честный ЗНАК». Актуальный перечень 2026. Автоматизация контроля</h1>
+      <p class="subtitle">МДК.02.03. Цифровые технологии кодирования товаров · Тема 3. Лекция 2</p>
+      <div class="badge">3 курс · 2026 · Лектор: канд. техн. наук Югай А. В.</div>
+    </div>
+  </section>
+
+  <!-- ===== 2. ЦЕЛЬ И ЗАДАЧИ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 2</div>
+        <h2>Цель и задачи лекции</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p><strong>Цель:</strong> сформировать целостное понимание нормативно-правового и организационно-технического механизма обязательной маркировки в 2026 году, включая роль ЭДО и автоматизированного контроля.</p>
+      <div class="point-grid cols-auto">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Систематизировать НПА</h4><p>Иерархия актов по маркировке и ЭДО</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Раскрыть ЭДО</h4><p>Обязательность документооборота</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Показать ГИС МТ</h4><p>Функции ЛК «Честный ЗНАК»</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>Перечень 2026</h4><p>Товарные группы и сроки</p></div></div>
+        <div class="point"><div class="point-icon">5</div><div class="point-body"><h4>Автоматизация</h4><p>ТС ПИоТ, разрешительный режим</p></div></div>
       </div>
     </div>
-    <h1>Законодательная база обязательной маркировки товаров. ЭДО. Работа в системе «Честный ЗНАК». Актуальный перечень 2026. Автоматизация контроля</h1>
-    <p>МДК.02.03. Цифровые технологии кодирования товаров · Тема 3. Лекция 2</p>
-    <div class="badge">3 курс · 2026 · Лектор: канд. техн. наук Югай А. В.</div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 3. ИСТОЧНИКИ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 3</div>
+        <h2>Литература и источники</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="two-col">
+        <div>
+          <h3>Нормативные правовые акты</h3>
+          <ul>
+            <li>ФЗ от 28.12.2009 № 381-ФЗ (ст. 20.1)</li>
+            <li>ПП РФ № 1944 (ред. 07.03.2026) — разрешительный режим</li>
+            <li>ПП РФ № 818 — кондитерские изделия</li>
+            <li>ПП РФ № 1682 — бакалея</li>
+            <li>ПП РФ № 819 — детские игрушки</li>
+            <li>ПП РФ № 1954 — радиоэлектроника</li>
+            <li>ПП РФ № 75 — меховые изделия (с 01.03.2026)</li>
+            <li>Отраслевые: № 860, 1956, 1556, 673 и др.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Официальные ресурсы</h3>
+          <ul>
+            <li>ГИС МТ «Честный ЗНАК» — chestnyznak.ru</li>
+            <li>Роспотребнадзор — zpp.rospotrebnadzor.ru</li>
+            <li>Операторы ЭДО: «Контур.Диадок», «СБИС», «Такском»</li>
+          </ul>
+          <div class="highlight">
+            <strong>Примечание.</strong> ПП № 75 — отраслевой документ по меховой группе, а не универсальные правила агрегации.
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 4. МАРКИРОВКА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 4</div>
+        <h2>Повторение: маркировка и прослеживаемость</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Что такое маркировка</h4><p>Нанесение средств идентификации (Data Matrix) для поштучного учёта</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Штрихкод vs Data Matrix</h4><p>Штрихкод — вид товара; Data Matrix — конкретный экземпляр</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Цели системы</h4><p>Борьба с контрафактом, безопасность, обеление рынка</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>«Честный ЗНАК»</h4><p>Государственно-частная платформа (оператор — ЦРПТ)</p></div></div>
+      </div>
+      <div class="scheme">
+        <div class="node">Клеймо</div>
+        <div class="arrow">→</div>
+        <div class="node">Линейный штрихкод</div>
+        <div class="arrow">→</div>
+        <div class="node">Data Matrix</div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 5. РАЗРЕШИТЕЛЬНЫЙ РЕЖИМ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 5</div>
+        <h2>Повторение: разрешительный режим</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p><strong>Суть:</strong> касса проверяет код в ГИС МТ онлайн и блокирует продажу в следующих случаях:</p>
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">✕</div><div class="point-body"><h4>Код отсутствует</h4><p>Не введён в систему</p></div></div>
+        <div class="point"><div class="point-icon">✕</div><div class="point-body"><h4>Повторная продажа</h4><p>Код уже погашен</p></div></div>
+        <div class="point"><div class="point-icon">✕</div><div class="point-body"><h4>Истёк срок</h4><p>Просроченный товар</p></div></div>
+        <div class="point"><div class="point-icon">✕</div><div class="point-body"><h4>Цена нарушена</h4><p>Табачная продукция</p></div></div>
+        <div class="point"><div class="point-icon">✕</div><div class="point-body"><h4>Запрет контроля</h4><p>Решение органа</p></div></div>
+        <div class="point"><div class="point-icon">✓</div><div class="point-body"><h4>Иначе — продажа</h4><p>Время проверки ≤ 1,5 с</p></div></div>
+      </div>
+      <div class="scheme">
+        <div class="node">Касса</div>
+        <div class="arrow">→</div>
+        <div class="node">Запрос в ГИС МТ</div>
+        <div class="arrow">→</div>
+        <div class="node">Разрешение / блокировка</div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 6. ГРУППЫ 2019–2025 ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 6</div>
+        <h2>Повторение: товарные группы и сроки (2019–2025)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <table>
+        <tr><th>Группа</th><th>Старт маркировки</th><th>Разрешительный режим</th></tr>
+        <tr><td>Табак</td><td>01.03.2019</td><td>01.04.2024</td></tr>
+        <tr><td>Обувь</td><td>01.07.2020</td><td>01.11.2024</td></tr>
+        <tr><td>Молочная продукция</td><td>01.06.2021 / 01.09.2021</td><td>01.05.2024 / 01.09.2024</td></tr>
+        <tr><td>Парфюмерия</td><td>01.10.2020</td><td>01.11.2024</td></tr>
+        <tr><td>Шины</td><td>01.11.2020</td><td>01.11.2024</td></tr>
+      </table>
+      <div class="highlight">Основные этапы пройдены; в 2026 году к ним добавляются новые категории.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 7. ИЕРАРХИЯ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 7</div>
+        <h2>Иерархия нормативной базы маркировки</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="scheme scheme-col">
+        <div class="node" style="background:var(--navy); color:#fff; border-color:var(--navy);">Федеральный закон № 381-ФЗ (ст. 20.1)</div>
+        <div class="arrow">↓</div>
+        <div class="node">Постановление № 1944 — разрешительный режим</div>
+        <div class="arrow">↓</div>
+        <div class="node">Отраслевые постановления (№ 818, 1682, 819, 1954 и др.)</div>
+        <div class="arrow">↓</div>
+        <div class="node">Приказы Минпромторга, разъяснения ЦРПТ и Роспотребнадзора</div>
+      </div>
+      <p style="text-align:center; color:var(--muted); font-size:18px;">Закон → Постановление Правительства → Отраслевое постановление → Технические детали</p>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 8. 381-ФЗ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 8</div>
+        <h2>Федеральный закон № 381-ФЗ: ключевые нормы</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p><strong>Ст. 20.1</strong> — базовая норма:</p>
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Обязанность маркировать</h4><p>Участники оборота обязаны маркировать товары</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Перечень и правила</h4><p>Правительство утверждает перечень и правила</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>ГИС МТ</h4><p>Создаётся государственная система (оператор — ЦРПТ)</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>Передача сведений</h4><p>Участники обязаны передавать данные в систему</p></div></div>
+      </div>
+      <div class="warning">Маркировка — не рекомендация, а публично-правовая обязанность. Неисполнение влечёт административную и уголовную ответственность.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 9. 1944 — БЛОКИРОВКА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 9</div>
+        <h2>Постановление № 1944: основания для блокировки</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p>Продажа блокируется, если:</p>
+      <div class="point-grid cols-3">
+        <div class="point" style="border-left-color:var(--danger);"><div class="point-icon" style="background:var(--danger); color:#fff;">✕</div><div class="point-body"><h4>Код отсутствует</h4><p>Не введён в систему</p></div></div>
+        <div class="point" style="border-left-color:var(--danger);"><div class="point-icon" style="background:var(--danger); color:#fff;">✕</div><div class="point-body"><h4>Код уже выведен</h4><p>Повторная продажа</p></div></div>
+        <div class="point" style="border-left-color:var(--danger);"><div class="point-icon" style="background:var(--danger); color:#fff;">✕</div><div class="point-body"><h4>Истёк срок годности</h4><p>Просроченный товар</p></div></div>
+        <div class="point" style="border-left-color:var(--danger);"><div class="point-icon" style="background:var(--danger); color:#fff;">✕</div><div class="point-body"><h4>Нарушено ценообразование</h4><p>Табачная продукция</p></div></div>
+        <div class="point" style="border-left-color:var(--danger);"><div class="point-icon" style="background:var(--danger); color:#fff;">✕</div><div class="point-body"><h4>Запрет органов контроля</h4><p>Решение надзорного органа</p></div></div>
+        <div class="point" style="border-left-color:var(--blue);"><div class="point-icon" style="background:var(--blue); color:#fff;">✓</div><div class="point-body"><h4>Во всех остальных случаях</h4><p>Продажа разрешена</p></div></div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 10. ЛОГИКА ПОСТАНОВЛЕНИЙ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 10</div>
+        <h2>Постановления по товарным группам: логика</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p>Каждая группа получает отдельное постановление, где прописаны:</p>
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Сроки начала маркировки</h4><p>Даты старта обязательной маркировки</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Сроки разрешительного режима</h4><p>Когда касса начнёт проверять коды</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Особенности нанесения</h4><p>Изделие / упаковка / бирка</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>Переходные положения</h4><p>Льготы для остатков и малого бизнеса</p></div></div>
+      </div>
+      <div class="highlight"><strong>Примеры:</strong> № 860 (обувь), № 1956 (молочная), № 818 (кондитерка), № 1682 (бакалея), № 819 (игрушки), № 1954 (радиоэлектроника), № 1556 (лекарства).</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 11. ЭДО ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 11</div>
+        <h2>ЭДО: определение и правовой статус</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p><strong>ЭДО</strong> — электронный документооборот через оператора (Диадок, СБИС, Такском).</p>
+      <div class="highlight">При обороте маркированных товаров <strong>УПД передаётся только в электронном виде</strong> через ЭДО.</div>
+      <p>Бумажная накладная без передачи кодов в ГИС МТ не считается корректной первичкой.</p>
+      <div class="scheme">
+        <div class="node">Поставщик</div>
+        <div class="arrow">→</div>
+        <div class="node">ЭДО-оператор</div>
+        <div class="arrow">→</div>
+        <div class="node">Покупатель</div>
+        <div class="arrow">↔</div>
+        <div class="node">ГИС МТ</div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 12. УПД ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 12</div>
+        <h2>УПД: функции и формат 5.03</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p><strong>УПД</strong> — универсальный передаточный документ: счёт-фактура + первичный документ.</p>
+      <p>С 2026 года применяется единый формат <strong>5.03</strong>.</p>
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Коды маркировки</h4><p>Передаются при поэкземплярном учёте (ПЭУ)</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>GTIN + количество</h4><p>При объёмно-сортовом учёте (ОСУ)</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>СтТовБезНДСПрослеж</h4><p>Стоимость прослеживаемого товара без НДС</p></div></div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 13. ОСУ / ПЭУ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 13</div>
+        <h2>Объёмно-сортовой (ОСУ) и поэкземплярный (ПЭУ) учёт</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="split-2">
+        <div class="split-card">
+          <h3>ОСУ</h3>
+          <p>В УПД указывается GTIN и количество. Каждая единица товара не отслеживается.</p>
+        </div>
+        <div class="split-card">
+          <h3>ПЭУ</h3>
+          <p>В УПД передаются все коды маркировки партии. Отслеживается каждая единица.</p>
+        </div>
+      </div>
+      <div class="highlight"><strong>Тенденция 2026 года:</strong> всё больше групп переходят с ОСУ на ПЭУ (бакалея, кондитерка, моторные масла, ветпрепараты и др.).</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 14. ОПЕРАТОРЫ ЭДО ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 14</div>
+        <h2>Роль операторов ЭДО и роуминг</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>«Контур.Диадок»</h4><p>Один из основных операторов ЭДО</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>«СБИС» (Тензор)</h4><p>Один из основных операторов ЭДО</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>«Такском»</h4><p>Один из основных операторов ЭДО</p></div></div>
+        <div class="point"><div class="point-icon">↔</div><div class="point-body"><h4>Роуминг</h4><p>Автоматический обмен документами между разными операторами</p></div></div>
+      </div>
+      <div class="highlight">Настроить ЭДО со всеми контрагентами необходимо до начала работы с маркированной группой.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 15. ЛК ГИС МТ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 15</div>
+        <h2>Личный кабинет ГИС МТ «Честный ЗНАК»</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p><strong>Вход:</strong> только по УКЭП через markirovka.crpt.ru.</p>
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Заказ кодов</h4><p>Формирование заявки на эмиссию</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Ввод в оборот</h4><p>Регистрация товаров в системе</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Передача прав (УПД)</h4><p>Оформление отгрузки</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>Вывод из оборота</h4><p>Розничная продажа, списание</p></div></div>
+        <div class="point"><div class="point-icon">5</div><div class="point-body"><h4>Аналитика и статусы</h4><p>Отчёты и мониторинг</p></div></div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 16. КАТАЛОГ И GTIN ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 16</div>
+        <h2>Национальный каталог и GTIN</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">📖</div><div class="point-body"><h4>Национальный каталог</h4><p>База данных о товарах в «Честном ЗНАКе»</p></div></div>
+        <div class="point"><div class="point-icon">#</div><div class="point-body"><h4>GTIN</h4><p>Глобальный номер товарной позиции (14 цифр), зашивается в Data Matrix</p></div></div>
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Производитель / импортёр</h4><p>Создаёт карточку товара в каталоге</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Оптовик / розница</h4><p>Получает GTIN от поставщика или из кода</p></div></div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 17. КОНДИТЕРКА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 17</div>
+        <h2>Перечень 2026: кондитерские изделия (ПП № 818)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">01.03.2026</div>
+          <div class="tl-desc">Печенье, мармелад, зефир, пастила, вафли, пасты</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">01.05.2026</div>
+          <div class="tl-desc">Круассаны, пирожные, рулеты, торты</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">01.07.2026</div>
+          <div class="tl-desc">Шоколад, карамель, драже, жевательная резинка</div>
+        </div>
+      </div>
+      <div class="highlight"><strong>Исключение:</strong> хлебобулочные изделия со сроком годности до 30 суток.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 18. БАКАЛЕЯ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 18</div>
+        <h2>Перечень 2026: бакалея (ПП № 1682)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">01.03.2026</div>
+          <div class="tl-desc">Регистрация участников оборота в ГИС МТ</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">01.09.2026</div>
+          <div class="tl-desc">Первый этап: макароны, мёд, мюсли, картофель быстрого приготовления</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">01.12.2026</div>
+          <div class="tl-desc">Второй этап: мука, крупы, смеси круп, смеси для теста</div>
+        </div>
+      </div>
+      <div class="highlight">Чай и кофе в ПП № 1682 на этих этапах не значатся — следите за отдельными актами и разъяснениями ЦРПТ.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 19. ИГРУШКИ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 19</div>
+        <h2>Перечень 2026: игрушки (ПП № 819)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="timeline cols-2">
+        <div class="tl-item"><div class="tl-date">01.09.2025</div><div class="tl-desc">Старт регистрации участников</div></div>
+        <div class="tl-item"><div class="tl-date">01.12.2025</div><div class="tl-desc">Старт обязательной маркировки новых товаров</div></div>
+        <div class="tl-item"><div class="tl-date">01.09.2026</div><div class="tl-desc">Запрет оборота товаров без маркировки</div></div>
+        <div class="tl-item"><div class="tl-date">до 01.03.2027</div><div class="tl-desc">Продлён срок маркировки остатков (по разъяснениям)</div></div>
+      </div>
+      <div class="highlight">Маркируются по кодам ТН ВЭД 9503, 9504 40 000 0, 9504 90 100 0, 9504 90 800 9.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 20. РАДИОЭЛЕКТРОНИКА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 20</div>
+        <h2>Перечень 2026: радиоэлектроника (ПП № 1954)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="timeline cols-2">
+        <div class="tl-item"><div class="tl-date">01.03.2026</div><div class="tl-desc">Регистрация участников оборота</div></div>
+        <div class="tl-item"><div class="tl-date">01.05.2026</div><div class="tl-desc">Маркировка новых товаров, ввод в оборот</div></div>
+        <div class="tl-item"><div class="tl-date">01.05–30.11.2026</div><div class="tl-desc">Маркировка остатков (произведённых / ввезённых до 30.04.2026)</div></div>
+        <div class="tl-item"><div class="tl-date">01.12.2026</div><div class="tl-desc">Запрет оборота немаркированной продукции</div></div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 21. МЕХ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 21</div>
+        <h2>Перечень 2026: меховые изделия (ПП № 75)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p>Постановление Правительства РФ от 31.01.2026 № 75 утвердило новые Правила маркировки <strong>меховых изделий</strong> средствами идентификации.</p>
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>С 01.03.2026</h4><p>Регистрация участников оборота</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Что маркируется</h4><p>Одежда из норки, песца, лисицы, зайца, енота, овчины</p></div></div>
+      </div>
+      <div class="highlight">Это не универсальные правила агрегации, а отраслевой документ по меховой группе.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 22. ТС ПИОТ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 22</div>
+        <h2>Автоматизация контроля: переход на ТС ПИоТ</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p><strong>ТС ПИоТ</strong> — технические средства получения информации о товаре (программный модуль), связывающий кассу с ГИС МТ.</p>
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>28.12.2025</h4><p>Обязанность перейти на ТС ПИоТ</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>01.07.2026</h4><p>ТС ПИоТ обязателен для проверки кодов на кассе</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>01.10.2026</h4><p>Токен X-API-KEY действует до этой даты</p></div></div>
+      </div>
+      <div class="scheme">
+        <div class="node">Токен (до 01.10.2026)</div>
+        <div class="arrow">→</div>
+        <div class="node">ТС ПИоТ (с 01.07.2026)</div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 23. ФУНКЦИИ ТС ПИОТ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 23</div>
+        <h2>Функции ТС ПИоТ</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Связь с ГИС МТ</h4><p>Прямая связь кассы с государственной системой</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Проверка в реальном времени</h4><p>Валидация кода при сканировании</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Автоблокировка</h4><p>Продажа запрещённых товаров блокируется</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>Передача отклонений</h4><p>Сведения об отклонениях в ГИС МТ</p></div></div>
+        <div class="point"><div class="point-icon">5</div><div class="point-body"><h4>Контроль кассового узла</h4><p>Мониторинг работоспособности</p></div></div>
+      </div>
+      <div class="warning">Отклонения в чеках (продажа без проверки) автоматически фиксируются и передаются в надзорные органы.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 24. ОТВЕТСТВЕННОСТЬ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 24</div>
+        <h2>Ответственность: ст. 15.12 и 15.12.1 КоАП РФ</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <table>
+        <tr><th>Статья</th><th>Состав</th><th>Штраф</th></tr>
+        <tr><td><strong>15.12</strong></td><td>Производство / продажа без маркировки</td><td>ИП: 5–10 тыс. ₽ + конфискация; ЮЛ: 50–300 тыс. ₽ + конфискация</td></tr>
+        <tr><td><strong>15.12.1</strong></td><td>Нарушения передачи сведений в ГИС МТ</td><td>ИП: предупреждение или 1–10 тыс. ₽; ЮЛ: 50–100 тыс. ₽</td></tr>
+      </table>
+      <div class="highlight"><strong>Разграничение:</strong> ст. 15.12 — про отсутствие кода; ст. 15.12.1 — про дефекты документооборота (УПД, ЭДО).</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 25. УК И ФИКСАЦИЯ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 25</div>
+        <h2>Уголовная ответственность и автоматическая фиксация</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">⚖</div><div class="point-body"><h4>УК РФ, ст. 171.1</h4><p>Производство / сбыт немаркированных товаров в крупном размере</p></div></div>
+        <div class="point"><div class="point-icon">📡</div><div class="point-body"><h4>Автоматическая фиксация</h4><p>Сведения о срабатывании разрешительного режима поступают в Роспотребнадзор</p></div></div>
+      </div>
+      <div class="warning">Отдельная проверка не требуется — система сама сигнализирует о нарушении.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 26. КЕЙС: ФАБРИКА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 26</div>
+        <h2>Кейс: кондитерская фабрика (торты)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">!</div><div class="point-body"><h4>Ситуация</h4><p>Фабрика выпускает торты. С 01.05.2026 — обязательная маркировка.</p></div></div>
+        <div class="point"><div class="point-icon">⚠</div><div class="point-body"><h4>Проблема</h4><p>Скоропортящийся продукт, короткий срок хранения</p></div></div>
+      </div>
+      <ol class="numbered-list">
+        <li>Заказ кодов заблаговременно (до мая)</li>
+        <li>Обновление кассового ПО до ТС ПИоТ</li>
+        <li>Подключение ЭДО и настройка УПД с кодами</li>
+        <li>Маркировка на этапе упаковки</li>
+      </ol>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 27. КЕЙС: ОБУВЬ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 27</div>
+        <h2>Кейс: магазин получает немаркированную обувь</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Не принимать</h4><p>Товар без маркировки</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Вернуть поставщику</h4><p>Зафиксировать расхождение в УПД</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Риск штрафа</h4><p>По ст. 15.12 КоАП РФ</p></div></div>
+      </div>
+      <div class="warning">Разрешительный режим не позволит продать товар, но <strong>факт приёмки</strong> уже является нарушением.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 28. КЕЙС: ПРОСРОЧКА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 28</div>
+        <h2>Кейс: продажа просрочки</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">!</div><div class="point-body"><h4>Ситуация</h4><p>Кассир сканирует товар с истёкшим сроком годности</p></div></div>
+        <div class="point"><div class="point-icon">✕</div><div class="point-body"><h4>Действие кассы</h4><p>Блокировка продажи (разрешительный режим)</p></div></div>
+        <div class="point"><div class="point-icon">✓</div><div class="point-body"><h4>Действие магазина</h4><p>Снять товар с полки, списать</p></div></div>
+      </div>
+      <div class="highlight">Разрешительный режим делает продажу просрочки технически невозможной.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 29. ТАМОЖНЯ И ЕАЭС ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 29</div>
+        <h2>Маркировка и таможня. ЕАЭС</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="split-2">
+        <div class="split-card">
+          <h3>Таможня</h3>
+          <ul>
+            <li>Проверка кодов при ввозе</li>
+            <li>Сведения о кодах — <strong>до выпуска</strong> товара</li>
+            <li>Отсутствие маркировки — отказ в выпуске</li>
+          </ul>
+        </div>
+        <div class="split-card">
+          <h3>Взаимное признание в ЕАЭС</h3>
+          <ul>
+            <li>С <strong>07.05.2026</strong> — признание кодов между Беларусью и Россией (телефоны, ноутбуки, планшеты)</li>
+            <li>Единые правила маркировки кондитерки (Совет ЕЭК, 13.03.2026) — без перемаркировки внутри Союза</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 30. ЭПИ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 30</div>
+        <h2>Электронный паспорт изделия (ЭПИ) и Data Matrix</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">📄</div><div class="point-body"><h4>ЭПИ</h4><p>Цифровой двойник товара: история, характеристики, производство</p></div></div>
+        <div class="point"><div class="point-icon">▣</div><div class="point-body"><h4>Data Matrix</h4><p>Ключ к ЭПИ. Сканирование открывает доступ к паспорту</p></div></div>
+      </div>
+      <p>Реализация в России — через ГИСП (для промышленной продукции).</p>
+      <div class="scheme">
+        <div class="node">Data Matrix</div>
+        <div class="arrow">→</div>
+        <div class="node">ЭПИ (цифровой паспорт)</div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 31. ПРОБЛЕМЫ 1 ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 31</div>
+        <h2>Проблемы и вызовы системы (1)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="split-2">
+        <div class="split-card">
+          <h3>Технические</h3>
+          <p>Сбои связи с ГИС МТ. Качество печати кодов: нечитаемый код = блокировка продажи.</p>
+        </div>
+        <div class="split-card">
+          <h3>Финансовые</h3>
+          <p>Затраты на 2D-сканеры, кассы с ФФД 1.2, ПО (ТС ПИоТ, обновление 1С).</p>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 32. ПРОБЛЕМЫ 2 ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 32</div>
+        <h2>Проблемы и вызовы системы (2)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="split-2">
+        <div class="split-card">
+          <h3>Образовательные</h3>
+          <p>Низкая осведомлённость предпринимателей. Ошибки в УПД: неверные коды, пропуски.</p>
+        </div>
+        <div class="split-card">
+          <h3>Правовые</h3>
+          <p>Частые изменения нормативной базы — требуется постоянный мониторинг.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 33. ПО ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 33</div>
+        <h2>Программное обеспечение для бизнеса</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>1С: Предприятие</h4><p>Модуль маркировки</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Личный кабинет ГИС МТ</h4><p>Веб-интерфейс «Честного ЗНАКа»</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>ЭДО-система</h4><p>Диадок / СБИС / Такском</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>2D-сканеры</h4><p>Zebra, Honeywell, Datalogic</p></div></div>
+      </div>
+      <div class="highlight">Без связки «1С ↔ ЭДО ↔ ГИС МТ» корректная передача сведений невозможна.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 34. РОЛИ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 34</div>
+        <h2>Роли участников оборота в ЭДО</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="scheme">
+        <div class="node">Производитель / импортёр</div>
+        <div class="arrow">→</div>
+        <div class="node">Оптовик</div>
+        <div class="arrow">→</div>
+        <div class="node">Розница</div>
+      </div>
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Производитель</h4><p>Карточка в каталоге, заказ кодов, УПД с кодами</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Оптовик</h4><p>Приёмка и передача УПД с кодами</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Розница</h4><p>Приёмка, сканирование на кассе, вывод из оборота</p></div></div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 35. СРОКИ ЭДО ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 35</div>
+        <h2>Сроки и этапность введения ЭДО по группам</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <p>ЭДО вводится одновременно с поэкземплярным учётом для конкретной группы.</p>
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Бакалея</h4><p>ЭДО в отгрузке и приёмке — с 01.11.2026 (ПП № 1682)</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Моторные масла</h4><p>ПЭУ и ЭДО — с 01.04.2026</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Кондитерка</h4><p>ПЭУ для шоколада и карамели — с 01.07.2026</p></div></div>
+      </div>
+      <div class="highlight">Бумажные накладные уходят в прошлое для маркированных товаров.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 36. ИИ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 36</div>
+        <h2>Автоматизация контроля: роль ИИ и аналитики</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">AI</div><div class="point-body"><h4>Блокировка документов</h4><p>Автоматическая блокировка при критических ошибках в кодах</p></div></div>
+        <div class="point"><div class="point-icon">👁</div><div class="point-body"><h4>Компьютерное зрение</h4><p>Проверка читаемости кодов на производстве</p></div></div>
+        <div class="point"><div class="point-icon">↔</div><div class="point-body"><h4>Интеграция маркетплейсов</h4><p>Автоматизация проверок с «Честным ЗНАКом»</p></div></div>
+      </div>
+      <div class="highlight">Контроль становится проактивным, а не реактивным.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 37. ЧЕК-ЛИСТ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 37</div>
+        <h2>Проверка подлинности: чек-лист для потребителя</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <ol class="numbered-list">
+        <li>Сканировать код в приложении «Честный ЗНАК»</li>
+        <li>Проверить статус: «В обороте» или «Выведен»</li>
+        <li>Если «Выведен» — товар мог быть продан ранее (подозрительно)</li>
+        <li>Сверить данные производителя</li>
+        <li>При ошибке — сообщить в магазин или через приложение</li>
+      </ol>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 38. ЭФФЕКТ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 38</div>
+        <h2>Экономический эффект</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">↓</div><div class="point-body"><h4>Снижение контрафакта</h4><p>Меньше подделок на рынке</p></div></div>
+        <div class="point"><div class="point-icon">↑</div><div class="point-body"><h4>Рост налогов</h4><p>Обеление рынка, рост поступлений</p></div></div>
+        <div class="point"><div class="point-icon">=</div><div class="point-body"><h4>Честная конкуренция</h4><p>Для производителей, платящих налоги</p></div></div>
+        <div class="point"><div class="point-icon">✓</div><div class="point-body"><h4>Доверие потребителей</h4><p>Проверяемость каждого товара</p></div></div>
+      </div>
+      <div class="highlight">По данным Минпромторга, доля нелегального оборота обуви за несколько лет сократилась в разы.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 39. РИСКИ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 39</div>
+        <h2>Риски при переходе на ЭДО</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="split-2">
+        <div class="split-card">
+          <h3>Риски</h3>
+          <ul>
+            <li>Ошибки в кодах в УПД (блокировка приёмки)</li>
+            <li>Несвоевременная передача сведений (ст. 15.12.1 КоАП)</li>
+            <li>Технические сбои у оператора ЭДО</li>
+          </ul>
+        </div>
+        <div class="split-card">
+          <h3>Меры снижения</h3>
+          <ul>
+            <li>Тестирование обмена с ключевыми контрагентами</li>
+            <li>Резервные каналы связи</li>
+            <li>Обучение персонала</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 40. ОБУЧЕНИЕ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 40</div>
+        <h2>Обучение персонала как элемент автоматизации</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-3">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Кассиры</h4><p>Сканирование, действия при блокировке</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Менеджеры по закупкам</h4><p>Приёмка УПД с кодами</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Бухгалтеры</h4><p>Формирование УПД, сверка кодов</p></div></div>
+      </div>
+      <div class="highlight">Формат: внутренние инструкции, тренажёры, повышение квалификации.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 41. МОНИТОРИНГ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 41</div>
+        <h2>Мониторинг изменений: как не пропустить новое</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">1</div><div class="point-body"><h4>Сайт ГИС МТ</h4><p>Раздел «Новости» на chestnyznak.ru</p></div></div>
+        <div class="point"><div class="point-icon">2</div><div class="point-body"><h4>Рассылки операторов ЭДО</h4><p>Диадок, СБИС, Такском</p></div></div>
+        <div class="point"><div class="point-icon">3</div><div class="point-body"><h4>Роспотребнадзор</h4><p>zpp.rospotrebnadzor.ru</p></div></div>
+        <div class="point"><div class="point-icon">4</div><div class="point-body"><h4>«Контур.Маркировка»</h4><p>Обзоры изменений</p></div></div>
+      </div>
+      <div class="highlight">Рекомендация: назначить ответственного за мониторинг нормативной базы.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 42. ПЕРСПЕКТИВЫ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 42</div>
+        <h2>Перспективы: 2027 и далее. Маркетплейсы</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="point-grid cols-2">
+        <div class="point"><div class="point-icon">↗</div><div class="point-body"><h4>Расширение перечня</h4><p>Удобрения, гигиенические товары и др.</p></div></div>
+        <div class="point"><div class="point-icon">●</div><div class="point-body"><h4>Полный ПЭУ</h4><p>Переход на поэкземплярный учёт</p></div></div>
+        <div class="point"><div class="point-icon">AI</div><div class="point-body"><h4>ИИ и блокчейн</h4><p>Углубление интеграции</p></div></div>
+        <div class="point"><div class="point-icon">⊕</div><div class="point-body"><h4>Гармонизация ЕАЭС</h4><p>Взаимное признание кодов</p></div></div>
+      </div>
+      <div class="highlight"><strong>Маркетплейсы.</strong> С 01.10.2026 WB, Ozon, Яндекс Маркет, Lamoda, Avito проверяют карточки через единый сервис с данными «Честного ЗНАКа». Карточки, размещённые ранее, — проверить до 30.03.2027.</div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 43. РЕЗЮМЕ 1 ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 43</div>
+        <h2>Резюме: ключевые выводы (1)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <ol class="numbered-list">
+        <li>Правовая основа: ФЗ № 381-ФЗ + Постановление № 1944 + отраслевые постановления</li>
+        <li>Разрешительный режим превратил маркировку из учётной в контрольную систему</li>
+        <li>ЭДО — обязательный канал передачи кодов в ГИС МТ; УПД формат 5.03</li>
+        <li>ТС ПИоТ — с 01.07.2026 обязательный способ проверки на кассе (токен до 01.10.2026)</li>
+      </ol>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 44. РЕЗЮМЕ 2 ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 44</div>
+        <h2>Резюме: ключевые выводы (2)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <ol class="numbered-list" start="5" style="counter-reset: item 4;">
+        <li>Перечень 2026: кондитерка, бакалея, игрушки, радиоэлектроника, меховые изделия, моторные масла, ветпрепараты и др.</li>
+        <li>Ответственность: ст. 15.12 (маркировка) и ст. 15.12.1 (ЭДО / сведения в ГИС МТ)</li>
+        <li>Автоматизация контроля: отклонения в чеках передаются в надзорные органы</li>
+        <li>Практическая готовность: оборудование, ПО, обучение, мониторинг изменений</li>
+      </ol>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 45. СХЕМА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 45</div>
+        <h2>Схема: «От товара до кассы»</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="scheme" style="flex-direction: column; gap: 8px;">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:14px;">
+          <div class="node">Производитель / импортёр</div>
+          <div class="arrow">→</div>
+          <div class="node">Нанесение Data Matrix</div>
+          <div class="arrow">→</div>
+          <div class="node">Ввод в оборот (ГИС МТ)</div>
+          <div class="arrow">→</div>
+          <div class="node">Отгрузка (УПД через ЭДО)</div>
+        </div>
+        <div class="arrow" style="text-align:center;">↓</div>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:14px;">
+          <div class="node">Опт → Розница (приёмка по УПД)</div>
+          <div class="arrow">→</div>
+          <div class="node">Касса (ТС ПИоТ)</div>
+          <div class="arrow">→</div>
+          <div class="node">Проверка в ГИС МТ</div>
+          <div class="arrow">→</div>
+          <div class="node" style="background:var(--yellow); border-color:var(--yellow);">Продажа / Блокировка</div>
+        </div>
+      </div>
+      <p style="text-align:center; color:var(--muted); font-size:18px;">Каждый этап фиксируется в цифровом следе товара</p>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 46. РЕФЛЕКСИЯ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 46</div>
+        <h2>Рефлексия</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <ol class="numbered-list">
+        <li>Как изменилась роль кассира с введением разрешительного режима?</li>
+        <li>Почему бумажная накладная без ЭДО считается некорректной первичкой?</li>
+        <li>Какие риски для бизнеса создаёт несвоевременная передача кодов в УПД?</li>
+        <li>В чём отличие ОСУ от ПЭУ и почему происходит переход?</li>
+        <li>Какие товарные группы в 2026 году стали для вас новыми?</li>
+      </ol>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 47. САМОПРОВЕРКА ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 47</div>
+        <h2>Вопросы для самопроверки</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <ol class="numbered-list">
+        <li>Какой федеральный закон устанавливает обязанность маркировки товаров?</li>
+        <li>Какие основания для блокировки продажи на кассе предусмотрены Постановлением № 1944?</li>
+        <li>Что такое УПД и почему для маркированных товаров он передаётся только через ЭДО?</li>
+        <li>Какие функции выполняет модуль ТС ПИоТ и с какой даты он обязателен?</li>
+        <li>Назовите три новые товарные группы, маркировка которых началась в 2026 году.</li>
+      </ol>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 48. ТЕСТ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 48</div>
+        <h2>Тест (5 вопросов)</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content">
+      <div class="two-col">
+        <div class="test-list">
+          <div class="test-question">
+            <p>1. Разрешительный режим — это:</p>
+            <ul>
+              <li>а) проверка кода на кассе с блокировкой при нарушении;</li>
+              <li>б) нанесение кодов на упаковку;</li>
+              <li>в) передача УПД через ЭДО.</li>
+            </ul>
+          </div>
+          <div class="test-question">
+            <p>2. Постановление № 1944 устанавливает:</p>
+            <ul>
+              <li>а) перечень товаров для маркировки;</li>
+              <li>б) случаи, когда продажа запрещена;</li>
+              <li>в) правила печати Data Matrix.</li>
+            </ul>
+          </div>
+          <div class="test-question">
+            <p>3. Для маркированных товаров УПД передаётся:</p>
+            <ul>
+              <li>а) только на бумаге;</li>
+              <li>б) только в электронном виде через ЭДО;</li>
+              <li>в) по выбору участника оборота.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="test-list">
+          <div class="test-question">
+            <p>4. ТС ПИоТ обязателен как способ проверки на кассе с:</p>
+            <ul>
+              <li>а) 01.01.2026;</li>
+              <li>б) 01.07.2026;</li>
+              <li>в) 01.10.2026.</li>
+            </ul>
+          </div>
+          <div class="test-question">
+            <p>5. Что маркируется с 01.05.2026 (второй этап кондитерки)?</p>
+            <ul>
+              <li>а) печенье и вафли;</li>
+              <li>б) торты и пирожные;</li>
+              <li>в) шоколад и карамель.</li>
+            </ul>
+          </div>
+          <div class="highlight"><strong>Ключ:</strong> 1а, 2б, 3б, 4б, 5б.</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 49. ВОПРОСЫ ===== -->
+  <section class="slide">
+    <header class="slide-header">
+      <div class="header-left">
+        <div class="slide-number">Слайд 49</div>
+        <h2>Ваши вопросы</h2>
+      </div>
+      <div class="header-mark">МДК.02.03</div>
+    </header>
+    <div class="slide-content center">
+      <div style="font-size:100px; font-weight:800; color:var(--blue); line-height:1;">?</div>
+      <p style="font-size:32px; color:var(--navy); font-weight:600;">Открытое поле для вопросов аудитории</p>
+      <p style="font-size:22px; color:var(--muted);">Контакт лектора: кафедра, email</p>
+      <div class="highlight" style="font-size:20px; align-self:stretch; text-align:center;">Ссылки для самостоятельного изучения: <strong>chestnyznak.ru</strong>, <strong>zpp.rospotrebnadzor.ru</strong></div>
+    </div>
+    <footer class="slide-footer"><span><strong>МДК.02.03</strong> · Цифровые технологии кодирования товаров</span><span>Лекция 2 · 2026</span></footer>
+  </section>
+
+  <!-- ===== 50. ФИНАЛ ===== -->
+  <section class="slide hero">
+    <div class="hero-inner hero-center">
+      <h1 style="font-size:56px;">Благодарю за внимание!</h1>
+      <p class="subtitle" style="color:var(--yellow); font-size:26px;">Университет «Синергия» · 2026</p>
+      <p class="subtitle" style="font-size:22px;">МДК.02.03. Цифровые технологии кодирования товаров</p>
+      <div class="badge">Дисциплина: МДК.02.03 · Преподаватель: Югай А. В.</div>
+    </div>
+  </section>
+
   </div>
-
-  <!-- ================= СЛАЙД 2 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 2</div>
-    <h2>Цель и задачи лекции</h2>
-    <p><strong>Цель:</strong> сформировать целостное понимание нормативно-правового и организационно-технического механизма обязательной маркировки в 2026 году, включая роль ЭДО и автоматизированного контроля.</p>
-    <h3>Задачи</h3>
-    <div class="card-grid">
-      <div class="card"><h4>1. Систематизировать НПА</h4><p>Иерархия нормативных актов по маркировке и ЭДО.</p></div>
-      <div class="card"><h4>2. Раскрыть ЭДО</h4><p>Обязательный характер электронного документооборота.</p></div>
-      <div class="card"><h4>3. Показать ГИС МТ</h4><p>Функции личного кабинета «Честный ЗНАК».</p></div>
-      <div class="card"><h4>4. Актуализировать перечень</h4><p>Товарные группы и сроки 2026 года.</p></div>
-      <div class="card"><h4>5. Объяснить автоматизацию</h4><p>ТС ПИоТ, разрешительный режим и последствия нарушений.</p></div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 3 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 3</div>
-    <h2>Литература и источники</h2>
-    <h3>Нормативные правовые акты</h3>
-    <ul>
-      <li>Федеральный закон от 28.12.2009 № 381-ФЗ (ст. 20.1) — базовый закон о маркировке.</li>
-      <li>Постановление Правительства РФ от 21.11.2023 № 1944 (ред. от 07.03.2026) — разрешительный режим.</li>
-      <li>Постановление Правительства РФ от 31.05.2025 № 818 — кондитерские изделия.</li>
-      <li>Постановление Правительства РФ от 30.11.2024 № 1682 (ред. от 28.02.2026) — бакалейная продукция и мясные изделия.</li>
-      <li>Постановление Правительства РФ от 31.05.2025 № 819 — детские игрушки.</li>
-      <li>Постановление Правительства РФ от 28.11.2025 № 1954 — радиоэлектроника.</li>
-      <li>Постановление Правительства РФ от 31.01.2026 № 75 — меховые изделия (с 01.03.2026).</li>
-      <li>Постановления по отдельным группам (№ 860, 1956, 1957, 1958, 1556, 1953, 673 и др.).</li>
-    </ul>
-    <h3>Официальные ресурсы</h3>
-    <ul>
-      <li>Сайт ГИС МТ «Честный ЗНАК» (chestnyznak.ru).</li>
-      <li>Разъяснения Роспотребнадзора (zpp.rospotrebnadzor.ru).</li>
-      <li>Материалы операторов ЭДО: «Контур.Диадок», «СБИС», «Такском».</li>
-    </ul>
-    <div class="highlight">
-      <strong>Примечание.</strong> Постановление № 75 от 31.01.2026 регулирует маркировку <em>меховых изделий</em> и не является универсальным источником по агрегации. Для общих правил агрегации следует опираться на отраслевые постановления и методические рекомендации ЦРПТ.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 4 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 4</div>
-    <h2>Повторение: маркировка и прослеживаемость</h2>
-    <ul>
-      <li>Маркировка — нанесение средств идентификации (Data Matrix) для <strong>поштучного учёта</strong>.</li>
-      <li>Штрихкод идентифицирует <em>вид</em> товара; Data Matrix — <em>экземпляр</em>.</li>
-      <li>Цели: борьба с контрафактом, безопасность, прослеживаемость, обеление рынка.</li>
-      <li>«Честный ЗНАК» — государственно-частная платформа (оператор — ЦРПТ).</li>
-    </ul>
-    <div class="scheme">
-      <div class="node">Клеймо</div>
-      <div class="arrow">→</div>
-      <div class="node">Линейный штрихкод</div>
-      <div class="arrow">→</div>
-      <div class="node">Data Matrix</div>
-    </div>
-    <p style="text-align:center; font-size:0.95em; color:var(--text-muted);">От статистического учёта — к поштучному контролю</p>
-  </section>
-
-  <!-- ================= СЛАЙД 5 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 5</div>
-    <h2>Повторение: разрешительный режим</h2>
-    <p><strong>Суть:</strong> касса проверяет код в ГИС МТ онлайн и блокирует продажу при:</p>
-    <ul>
-      <li>отсутствии кода в системе;</li>
-      <li>повторной продаже (код уже погашен);</li>
-      <li>истёкшем сроке годности;</li>
-      <li>нарушении ценообразования (табак);</li>
-      <li>запрете органов контроля.</li>
-    </ul>
-    <p><strong>Нормативная основа:</strong> Постановление № 1944.</p>
-    <div class="scheme">
-      <div class="node">Касса</div>
-      <div class="arrow">→</div>
-      <div class="node">Запрос в ГИС МТ</div>
-      <div class="arrow">→</div>
-      <div class="node">Разрешение / блокировка</div>
-    </div>
-    <p style="font-size:0.95em; color:var(--text-muted);">Время проверки — не более 1,5 секунды.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 6 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 6</div>
-    <h2>Повторение: товарные группы и сроки (2019–2025)</h2>
-    <table>
-      <tr><th>Группа</th><th>Старт маркировки</th><th>Разрешительный режим</th></tr>
-      <tr><td>Табак</td><td>01.03.2019</td><td>01.04.2024</td></tr>
-      <tr><td>Обувь</td><td>01.07.2020</td><td>01.11.2024</td></tr>
-      <tr><td>Молочная продукция</td><td>01.06.2021 / 01.09.2021</td><td>01.05.2024 / 01.09.2024</td></tr>
-      <tr><td>Парфюмерия</td><td>01.10.2020</td><td>01.11.2024</td></tr>
-      <tr><td>Шины</td><td>01.11.2020</td><td>01.11.2024</td></tr>
-    </table>
-    <p style="font-size:0.95em; color:var(--text-muted);">Эти группы уже прошли основные этапы; в 2026 году к ним добавляются новые категории.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 7 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 7</div>
-    <h2>Иерархия нормативной базы маркировки</h2>
-    <div class="scheme" style="flex-direction: column; align-items: stretch;">
-      <div class="node" style="background:var(--synergy-navy); color:#fff;">Федеральный закон № 381-ФЗ (ст. 20.1)</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Постановление № 1944 — разрешительный режим</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Отраслевые постановления по группам (№ 818, 1682, 819, 1954 и др.)</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Приказы Минпромторга, разъяснения ЦРПТ и Роспотребнадзора</div>
-    </div>
-    <p>Закон → Постановление Правительства → Отраслевое постановление → Технические детали.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 8 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 8</div>
-    <h2>Федеральный закон № 381-ФЗ: ключевые нормы</h2>
-    <p><strong>Ст. 20.1</strong> — основа:</p>
-    <ul>
-      <li>участники оборота обязаны маркировать товары;</li>
-      <li>Правительство утверждает перечень и правила;</li>
-      <li>создаётся ГИС МТ (оператор — ЦРПТ);</li>
-      <li>участники обязаны передавать сведения в систему.</li>
-    </ul>
-    <div class="warning">
-      Маркировка — не рекомендация, а публично-правовая обязанность. Неисполнение влечёт административную и уголовную ответственность.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 9 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 9</div>
-    <h2>Постановление № 1944: основания для блокировки</h2>
-    <p>Продажа блокируется, если:</p>
-    <div class="card-grid">
-      <div class="card" style="border-color:var(--danger);"><h4>Код отсутствует / не введён</h4></div>
-      <div class="card" style="border-color:var(--danger);"><h4>Код уже выведен (повторная продажа)</h4></div>
-      <div class="card" style="border-color:var(--danger);"><h4>Истёк срок годности</h4></div>
-      <div class="card" style="border-color:var(--danger);"><h4>Нарушен порядок ценообразования (табак)</h4></div>
-      <div class="card" style="border-color:var(--danger);"><h4>Запрет органов контроля</h4></div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 10 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 10</div>
-    <h2>Постановления по товарным группам: логика</h2>
-    <p>Каждая группа получает отдельное постановление, где прописаны:</p>
-    <ul>
-      <li>сроки начала маркировки;</li>
-      <li>сроки введения разрешительного режима;</li>
-      <li>особенности нанесения (изделие / упаковка / бирка);</li>
-      <li>переходные положения.</li>
-    </ul>
-    <p><strong>Примеры:</strong> № 860 (обувь), № 1956 (молочная), № 818 (кондитерка), № 1682 (бакалея), № 819 (игрушки), № 1954 (радиоэлектроника), № 1556 (лекарства).</p>
-  </section>
-
-  <!-- ================= СЛАЙД 11 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 11</div>
-    <h2>ЭДО: определение и правовой статус</h2>
-    <p><strong>ЭДО</strong> — электронный документооборот через оператора (Диадок, СБИС, Такском).</p>
-    <div class="highlight">
-      При обороте маркированных товаров <strong>УПД передаётся только в электронном виде</strong> через ЭДО.
-    </div>
-    <p>Бумажная накладная без передачи кодов в ГИС МТ не считается корректной первичкой.</p>
-    <div class="scheme">
-      <div class="node">Поставщик</div>
-      <div class="arrow">→</div>
-      <div class="node">ЭДО-оператор</div>
-      <div class="arrow">→</div>
-      <div class="node">Покупатель</div>
-      <div class="arrow">↔</div>
-      <div class="node">ГИС МТ</div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 12 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 12</div>
-    <h2>УПД: функции и формат 5.03</h2>
-    <p><strong>УПД</strong> — универсальный передаточный документ: счёт-фактура + первичный документ.</p>
-    <p>С 2026 года применяется единый формат <strong>5.03</strong>.</p>
-    <h3>Что обязательно для маркированных товаров</h3>
-    <ul>
-      <li>коды маркировки (при ПЭУ);</li>
-      <li>GTIN + количество (при ОСУ);</li>
-      <li>реквизит <code>СтТовБезНДСПрослеж</code> — стоимость прослеживаемого товара без НДС.</li>
-    </ul>
-  </section>
-
-  <!-- ================= СЛАЙД 13 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 13</div>
-    <h2>Объёмно-сортовой (ОСУ) и поэкземплярный (ПЭУ) учёт</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h4>ОСУ</h4>
-        <p>В УПД указывается GTIN и количество. Каждая единица не отслеживается.</p>
-      </div>
-      <div class="card">
-        <h4>ПЭУ</h4>
-        <p>В УПД передаются все коды маркировки партии. Отслеживается каждая единица.</p>
-      </div>
-    </div>
-    <p><strong>Тенденция 2026 года:</strong> всё больше групп переходят с ОСУ на ПЭУ (бакалея, кондитерка, моторные масла, ветпрепараты и др.).</p>
-  </section>
-
-  <!-- ================= СЛАЙД 14 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 14</div>
-    <h2>Роль операторов ЭДО и роуминг</h2>
-    <p><strong>Основные операторы:</strong> «Контур.Диадок», «СБИС» (Тензор), «Такском».</p>
-    <p><strong>Роуминг</strong> — автоматический обмен документами между разными операторами.</p>
-    <div class="highlight">
-      Настроить ЭДО со всеми контрагентами необходимо до начала работы с маркированной группой.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 15 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 15</div>
-    <h2>Личный кабинет ГИС МТ «Честный ЗНАК»</h2>
-    <p><strong>Вход:</strong> только по УКЭП через markirovka.crpt.ru.</p>
-    <div class="card-grid">
-      <div class="card"><h4>Заказ кодов</h4></div>
-      <div class="card"><h4>Ввод в оборот</h4></div>
-      <div class="card"><h4>Передача прав (УПД)</h4></div>
-      <div class="card"><h4>Вывод из оборота</h4></div>
-      <div class="card"><h4>Аналитика и статусы</h4></div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 16 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 16</div>
-    <h2>Национальный каталог и GTIN</h2>
-    <p><strong>Национальный каталог</strong> — база данных о товарах в «Честном ЗНАКе».</p>
-    <p><strong>GTIN</strong> — глобальный номер товарной позиции (14 цифр), зашивается в Data Matrix.</p>
-    <ul>
-      <li>Производитель / импортёр — создаёт карточку в каталоге.</li>
-      <li>Оптовик / розница — получает GTIN от поставщика или из кода.</li>
-    </ul>
-  </section>
-
-  <!-- ================= СЛАЙД 17 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 17</div>
-    <h2>Перечень 2026: кондитерские изделия (ПП № 818)</h2>
-    <table>
-      <tr><th>Дата</th><th>Что маркируется</th></tr>
-      <tr><td>01.03.2026</td><td>Печенье, мармелад, зефир, пастила, вафли, пасты</td></tr>
-      <tr><td>01.05.2026</td><td>Круассаны, пирожные, рулеты, торты</td></tr>
-      <tr><td>01.07.2026</td><td>Шоколад, карамель, драже, жевательная резинка</td></tr>
-    </table>
-    <p><strong>Исключение:</strong> хлебобулочные изделия со сроком годности до 30 суток.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 18 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 18</div>
-    <h2>Перечень 2026: бакалея (ПП № 1682)</h2>
-    <table>
-      <tr><th>Дата</th><th>Этап</th></tr>
-      <tr><td>01.03.2026</td><td>Регистрация участников оборота бакалейной продукции в ГИС МТ</td></tr>
-      <tr><td>01.09.2026</td><td>Первый этап: макароны, мёд, мюсли, картофель быстрого приготовления</td></tr>
-      <tr><td>01.12.2026</td><td>Второй этап: мука, крупы, смеси круп, смеси для приготовления теста</td></tr>
-    </table>
-    <div class="highlight">
-      Чай и кофе в ПП № 1682 на указанных этапах не значатся. Для уточнения сроков по этим товарам следует отслеживать отдельные акты Правительства и разъяснения ЦРПТ.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 19 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 19</div>
-    <h2>Перечень 2026: игрушки (ПП № 819)</h2>
-    <ul>
-      <li><strong>01.09.2025</strong> — старт регистрации участников.</li>
-      <li><strong>01.12.2025</strong> — старт обязательной маркировки новых товаров.</li>
-      <li><strong>01.09.2026</strong> — запрет оборота товаров без маркировки.</li>
-      <li><strong>До 01.03.2027</strong> — продлён срок маркировки остатков (по разъяснениям).</li>
-    </ul>
-    <p>Маркируются игрушки по кодам ТН ВЭД 9503, 9504 40 000 0, 9504 90 100 0, 9504 90 800 9.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 20 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 20</div>
-    <h2>Перечень 2026: радиоэлектроника (ПП № 1954)</h2>
-    <table>
-      <tr><th>Дата</th><th>Событие</th></tr>
-      <tr><td>01.03.2026</td><td>Регистрация участников оборота</td></tr>
-      <tr><td>01.05.2026</td><td>Маркировка новых товаров, ввод в оборот</td></tr>
-      <tr><td>01.05–30.11.2026</td><td>Маркировка остатков (произведённых / ввезённых до 30.04.2026)</td></tr>
-      <tr><td>01.12.2026</td><td>Запрет оборота немаркированной продукции</td></tr>
-    </table>
-  </section>
-
-  <!-- ================= СЛАЙД 21 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 21</div>
-    <h2>Перечень 2026: меховые изделия (ПП № 75)</h2>
-    <p>Постановление Правительства РФ от 31.01.2026 № 75 утвердило новые Правила маркировки <strong>меховых изделий</strong> средствами идентификации.</p>
-    <ul>
-      <li>С <strong>01.03.2026</strong> — регистрация участников оборота.</li>
-      <li>Маркировка одежды из норки, песца, лисицы, зайца, енота, овчины — вместо контрольных знаков используются средства идентификации со штрихкодами.</li>
-    </ul>
-    <div class="highlight">
-      Это не универсальные правила агрегации, а отраслевой документ по меховой группе.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 22 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 22</div>
-    <h2>Автоматизация контроля: переход на ТС ПИоТ</h2>
-    <p><strong>ТС ПИоТ</strong> — технические средства получения информации о товаре (программный модуль), связывающий кассу с ГИС МТ.</p>
-    <ul>
-      <li>С <strong>28.12.2025</strong> — обязанность перейти на ТС ПИоТ для участников оборота.</li>
-      <li>С <strong>01.07.2026</strong> — ТС ПИоТ становится обязательным способом проверки кодов на кассе.</li>
-      <li><strong>Токен X-API-KEY</strong> технически действует до <strong>01.10.2026</strong> (переходный период).</li>
-    </ul>
-    <div class="scheme">
-      <div class="node">Токен (до 01.10.2026)</div>
-      <div class="arrow">→</div>
-      <div class="node">ТС ПИоТ (обязателен с 01.07.2026)</div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 23 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 23</div>
-    <h2>Функции ТС ПИоТ</h2>
-    <ul>
-      <li>Прямая связь кассы с ГИС МТ.</li>
-      <li>Проверка валидности кода в реальном времени.</li>
-      <li>Автоматическая блокировка продажи запрещённых товаров.</li>
-      <li>Передача сведений об отклонениях в ГИС МТ.</li>
-      <li>Контроль работоспособности кассового узла.</li>
-    </ul>
-    <p>Отклонения в чеках (продажа без проверки) автоматически фиксируются и передаются в надзорные органы.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 24 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 24</div>
-    <h2>Ответственность: ст. 15.12 и 15.12.1 КоАП РФ</h2>
-    <table>
-      <tr><th>Статья</th><th>Состав</th><th>Штраф</th></tr>
-      <tr>
-        <td><strong>15.12</strong></td>
-        <td>Производство / продажа без маркировки</td>
-        <td>Должн. лица / ИП: 5 000–10 000 ₽ с конфискацией; юрлица: 50 000–300 000 ₽ с конфискацией</td>
-      </tr>
-      <tr>
-        <td><strong>15.12.1</strong></td>
-        <td>Непередача / нарушение сроков / недостоверные сведения в ГИС МТ</td>
-        <td>Должн. лица / ИП: предупреждение или 1 000–10 000 ₽; юрлица: 50 000–100 000 ₽</td>
-      </tr>
-    </table>
-    <div class="highlight">
-      <strong>Разграничение:</strong> ст. 15.12 — про отсутствие кода; ст. 15.12.1 — про дефекты документооборота (УПД, ЭДО).
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 25 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 25</div>
-    <h2>Уголовная ответственность и автоматическая фиксация</h2>
-    <p><strong>УК РФ, ст. 171.1</strong> — производство / сбыт немаркированных товаров в крупном размере.</p>
-    <p><strong>Автоматическая фиксация:</strong> сведения о срабатывании разрешительного режима (попытка продажи заблокированного товара) поступают в Роспотребнадзор.</p>
-    <div class="warning">
-      Отдельная проверка не требуется — система сама сигнализирует о нарушении.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 26 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 26</div>
-    <h2>Кейс: кондитерская фабрика (торты)</h2>
-    <p><strong>Ситуация:</strong> фабрика выпускает торты. С 01.05.2026 — обязательная маркировка.</p>
-    <p><strong>Проблема:</strong> скоропортящийся продукт, короткий срок хранения.</p>
-    <h3>Решение</h3>
-    <ol>
-      <li>Заказ кодов заблаговременно (до мая).</li>
-      <li>Обновление кассового ПО до ТС ПИоТ.</li>
-      <li>Подключение ЭДО и настройка УПД с кодами.</li>
-      <li>Маркировка на этапе упаковки.</li>
-    </ol>
-  </section>
-
-  <!-- ================= СЛАЙД 27 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 27</div>
-    <h2>Кейс: магазин получает немаркированную обувь</h2>
-    <ul>
-      <li><strong>Не принимать</strong> товар.</li>
-      <li>Если принят — вернуть поставщику, зафиксировать расхождение в УПД.</li>
-      <li>Риск: штраф по ст. 15.12 КоАП РФ.</li>
-    </ul>
-    <div class="warning">
-      Разрешительный режим не позволит продать товар, но <strong>факт приёмки</strong> уже является нарушением.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 28 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 28</div>
-    <h2>Кейс: продажа просрочки</h2>
-    <p><strong>Ситуация:</strong> кассир сканирует товар с истёкшим сроком годности.</p>
-    <p><strong>Действие кассы:</strong> блокировка продажи (разрешительный режим).</p>
-    <p><strong>Действие магазина:</strong> снять товар с полки, списать.</p>
-    <div class="highlight">
-      Разрешительный режим делает продажу просрочки технически невозможной.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 29 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 29</div>
-    <h2>Маркировка и таможня. ЕАЭС</h2>
-    <ul>
-      <li>Таможня проверяет наличие кодов при ввозе.</li>
-      <li>Импортёр обязан предоставить сведения о кодах <strong>до выпуска</strong> товара.</li>
-      <li>Отсутствие маркировки — основание для отказа в выпуске.</li>
-    </ul>
-    <h3>Взаимное признание в ЕАЭС</h3>
-    <ul>
-      <li>С <strong>07.05.2026</strong> — взаимное признание средств идентификации между Беларусью и Россией для мобильных телефонов, ноутбуков и планшетов.</li>
-      <li>Совет ЕЭК ввёл <strong>единые правила маркировки кондитерских изделий</strong> (решение от 13.03.2026), что исключает перемаркировку при обращении внутри Союза.</li>
-    </ul>
-  </section>
-
-  <!-- ================= СЛАЙД 30 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 30</div>
-    <h2>Электронный паспорт изделия (ЭПИ) и Data Matrix</h2>
-    <p><strong>ЭПИ</strong> — цифровой двойник товара: история, характеристики, производство.</p>
-    <p><strong>Data Matrix</strong> — ключ к ЭПИ. Сканирование открывает доступ к паспорту.</p>
-    <p>Реализация в России — через ГИСП (для промышленной продукции).</p>
-    <div class="scheme">
-      <div class="node">Data Matrix</div>
-      <div class="arrow">→</div>
-      <div class="node">ЭПИ (цифровой паспорт)</div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 31 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 31</div>
-    <h2>Проблемы и вызовы системы (1)</h2>
-    <div class="card-grid">
-      <div class="card"><h4>Технические</h4><p>Сбои связи с ГИС МТ; качество печати кодов (нечитаемый код = блокировка).</p></div>
-      <div class="card"><h4>Финансовые</h4><p>Затраты на 2D-сканеры, кассы с ФФД 1.2, ПО (ТС ПИоТ, обновление 1С).</p></div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 32 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 32</div>
-    <h2>Проблемы и вызовы системы (2)</h2>
-    <div class="card-grid">
-      <div class="card"><h4>Образовательные</h4><p>Низкая осведомлённость предпринимателей; ошибки в УПД (неверные коды, пропуски).</p></div>
-      <div class="card"><h4>Правовые</h4><p>Частые изменения нормативной базы — требуется постоянный мониторинг.</p></div>
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 33 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 33</div>
-    <h2>Программное обеспечение для бизнеса</h2>
-    <ul>
-      <li>1С: Предприятие (модуль маркировки).</li>
-      <li>Личный кабинет ГИС МТ.</li>
-      <li>ЭДО-система (Диадок / СБИС / Такском).</li>
-      <li>2D-сканеры (Zebra, Honeywell, Datalogic).</li>
-    </ul>
-    <div class="highlight">
-      Без связки «1С ↔ ЭДО ↔ ГИС МТ» корректная передача сведений невозможна.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 34 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 34</div>
-    <h2>Роли участников оборота в ЭДО</h2>
-    <div class="scheme">
-      <div class="node">Производитель / импортёр</div>
-      <div class="arrow">→</div>
-      <div class="node">Оптовик</div>
-      <div class="arrow">→</div>
-      <div class="node">Розница</div>
-    </div>
-    <ul>
-      <li><strong>Производитель:</strong> карточка в каталоге, заказ кодов, УПД с кодами.</li>
-      <li><strong>Оптовик:</strong> приёмка и передача УПД с кодами.</li>
-      <li><strong>Розница:</strong> приёмка, сканирование на кассе, вывод из оборота.</li>
-    </ul>
-  </section>
-
-  <!-- ================= СЛАЙД 35 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 35</div>
-    <h2>Сроки и этапность введения ЭДО по группам</h2>
-    <p>ЭДО вводится одновременно с поэкземплярным учётом для конкретной группы.</p>
-    <ul>
-      <li><strong>Бакалея:</strong> ЭДО в процессах отгрузки и приёмки — с 01.11.2026 (по ПП № 1682).</li>
-      <li><strong>Моторные масла:</strong> ПЭУ и ЭДО — с 01.04.2026.</li>
-      <li><strong>Кондитерка:</strong> ПЭУ для шоколада и карамели — с 01.07.2026.</li>
-    </ul>
-    <p>Бумажные накладные уходят в прошлое для маркированных товаров.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 36 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 36</div>
-    <h2>Автоматизация контроля: роль ИИ и аналитики</h2>
-    <ul>
-      <li>Автоматическая блокировка документов с критическими ошибками при вводе кодов в оборот.</li>
-      <li>Компьютерное зрение для проверки читаемости кодов на производстве.</li>
-      <li>Интеграция маркетплейсов с «Честным ЗНАКом» для автоматизации проверок.</li>
-    </ul>
-    <p>Контроль становится проактивным, а не реактивным.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 37 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 37</div>
-    <h2>Проверка подлинности: чек-лист для потребителя</h2>
-    <ol>
-      <li>Сканировать код в приложении «Честный ЗНАК».</li>
-      <li>Проверить статус: «В обороте» или «Выведен».</li>
-      <li>Если «Выведен» — товар мог быть продан ранее (подозрительно).</li>
-      <li>Сверить данные производителя.</li>
-      <li>При ошибке — сообщить в магазин или через приложение.</li>
-    </ol>
-  </section>
-
-  <!-- ================= СЛАЙД 38 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 38</div>
-    <h2>Экономический эффект</h2>
-    <ul>
-      <li>Снижение доли контрафакта.</li>
-      <li>Рост налоговых поступлений (обеление рынка).</li>
-      <li>Честная конкуренция для производителей, платящих налоги.</li>
-      <li>Повышение доверия потребителей.</li>
-    </ul>
-    <p>По данным Минпромторга, доля нелегального оборота обуви за несколько лет сократилась в разы.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 39 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 39</div>
-    <h2>Риски при переходе на ЭДО</h2>
-    <ul>
-      <li>Ошибки в кодах маркировки в УПД (приводят к блокировке приёмки).</li>
-      <li>Несвоевременная передача сведений (штрафы по ст. 15.12.1 КоАП).</li>
-      <li>Технические сбои у оператора ЭДО.</li>
-    </ul>
-    <h3>Меры mitigation</h3>
-    <ul>
-      <li>Тестирование обмена с ключевыми контрагентами.</li>
-      <li>Резервные каналы связи.</li>
-      <li>Обучение персонала.</li>
-    </ul>
-  </section>
-
-  <!-- ================= СЛАЙД 40 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 40</div>
-    <h2>Обучение персонала как элемент автоматизации</h2>
-    <ul>
-      <li><strong>Кассиры:</strong> сканирование, действия при блокировке.</li>
-      <li><strong>Менеджеры по закупкам:</strong> приёмка УПД с кодами.</li>
-      <li><strong>Бухгалтеры:</strong> формирование УПД, сверка кодов.</li>
-    </ul>
-    <p>Формат: внутренние инструкции, тренажёры, повышение квалификации.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 41 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 41</div>
-    <h2>Мониторинг изменений: как не пропустить новое</h2>
-    <ul>
-      <li>Официальный сайт ГИС МТ (раздел «Новости»).</li>
-      <li>Рассылки операторов ЭДО.</li>
-      <li>Портал Роспотребнадзора (zpp.rospotrebnadzor.ru).</li>
-      <li>Обзоры изменений «Контур.Маркировка».</li>
-    </ul>
-    <div class="highlight">
-      Рекомендация: назначить ответственного за мониторинг нормативной базы.
-    </div>
-  </section>
-
-  <!-- ================= СЛАЙД 42 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 42</div>
-    <h2>Перспективы: 2027 и далее. Маркетплейсы</h2>
-    <ul>
-      <li>Расширение перечня товаров (удобрения, гигиенические товары и др.).</li>
-      <li>Полный переход на поэкземплярный учёт.</li>
-      <li>Углубление интеграции с ИИ и блокчейном.</li>
-      <li>Гармонизация с системами ЕАЭС (взаимное признание кодов).</li>
-    </ul>
-    <h3>Маркетплейсы как канал контроля</h3>
-    <p>С <strong>01.10.2026</strong> маркетплейсы (Wildberries, Ozon, Яндекс Маркет, Lamoda, Avito и др.) обязаны проверять карточки товаров через единый сервис, учитывающий данные «Честного ЗНАКа». Карточки, размещённые до этой даты, должны быть проверены до <strong>30.03.2027</strong>.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 43 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 43</div>
-    <h2>Резюме: ключевые выводы (1)</h2>
-    <ol>
-      <li>Правовая основа: ФЗ № 381-ФЗ + Постановление № 1944 + отраслевые постановления.</li>
-      <li>Разрешительный режим превратил маркировку из учётной в контрольную систему.</li>
-      <li>ЭДО — обязательный канал передачи кодов в ГИС МТ; УПД формат 5.03.</li>
-      <li>ТС ПИоТ — с 01.07.2026 обязательный способ проверки на кассе (токен действует до 01.10.2026).</li>
-    </ol>
-  </section>
-
-  <!-- ================= СЛАЙД 44 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 44</div>
-    <h2>Резюме: ключевые выводы (2)</h2>
-    <ol start="5">
-      <li>Перечень 2026 охватывает кондитерку, бакалею, игрушки, радиоэлектронику, меховые изделия, моторные масла, ветпрепараты и др.</li>
-      <li>Ответственность: ст. 15.12 (маркировка) и ст. 15.12.1 (ЭДО / сведения в ГИС МТ).</li>
-      <li>Автоматизация контроля: отклонения в чеках передаются в надзорные органы.</li>
-      <li>Практическая готовность: оборудование, ПО, обучение, мониторинг изменений.</li>
-    </ol>
-  </section>
-
-  <!-- ================= СЛАЙД 45 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 45</div>
-    <h2>Схема: «От товара до кассы»</h2>
-    <div class="scheme" style="flex-direction: column; align-items: stretch; gap: 4px;">
-      <div class="node">Производитель / импортёр</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Нанесение Data Matrix</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Ввод в оборот (ГИС МТ)</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Отгрузка (УПД через ЭДО)</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Опт → Розница (приёмка по УПД)</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node">Касса (ТС ПИоТ) → Проверка в ГИС МТ</div>
-      <div class="arrow" style="text-align:center;">↓</div>
-      <div class="node" style="background:var(--synergy-yellow); border-color:var(--synergy-yellow);">Продажа / Блокировка</div>
-    </div>
-    <p style="text-align:center; font-size:0.95em; color:var(--text-muted);">Каждый этап фиксируется в цифровом следе товара.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 46 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 46</div>
-    <h2>Рефлексия</h2>
-    <ul>
-      <li>Как изменилась роль кассира с введением разрешительного режима?</li>
-      <li>Почему бумажная накладная без ЭДО считается некорректной первичкой?</li>
-      <li>Какие риски для бизнеса создаёт несвоевременная передача кодов в УПД?</li>
-      <li>В чём отличие ОСУ от ПЭУ и почему происходит переход?</li>
-      <li>Какие товарные группы в 2026 году стали для вас новыми?</li>
-    </ul>
-  </section>
-
-  <!-- ================= СЛАЙД 47 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 47</div>
-    <h2>Вопросы для самопроверки</h2>
-    <ol>
-      <li>Какой федеральный закон устанавливает обязанность маркировки товаров?</li>
-      <li>Какие основания для блокировки продажи на кассе предусмотрены Постановлением № 1944?</li>
-      <li>Что такое УПД и почему для маркированных товаров он передаётся только через ЭДО?</li>
-      <li>Какие функции выполняет модуль ТС ПИоТ и с какой даты он обязателен?</li>
-      <li>Назовите три новые товарные группы, маркировка которых началась или началась в 2026 году.</li>
-    </ol>
-  </section>
-
-  <!-- ================= СЛАЙД 48 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 48</div>
-    <h2>Тест (5 вопросов)</h2>
-    <div class="test-question">
-      <p>1. Разрешительный режим — это:</p>
-      <ul><li>а) проверка кода на кассе с блокировкой продажи при нарушении;</li><li>б) нанесение кодов на упаковку;</li><li>в) передача УПД через ЭДО.</li></ul>
-    </div>
-    <div class="test-question">
-      <p>2. Постановление № 1944 в редакции 07.03.2026 устанавливает:</p>
-      <ul><li>а) перечень товаров для маркировки;</li><li>б) случаи, когда продажа маркированного товара запрещена;</li><li>в) правила печати Data Matrix.</li></ul>
-    </div>
-    <div class="test-question">
-      <p>3. Для маркированных товаров УПД передаётся:</p>
-      <ul><li>а) только на бумаге;</li><li>б) только в электронном виде через ЭДО;</li><li>в) по выбору участника оборота.</li></ul>
-    </div>
-    <div class="test-question">
-      <p>4. ТС ПИоТ становится обязательным способом проверки кодов на кассе с:</p>
-      <ul><li>а) 01.01.2026;</li><li>б) 01.07.2026;</li><li>в) 01.10.2026.</li></ul>
-    </div>
-    <div class="test-question">
-      <p>5. Какая группа товаров маркируется с 01.05.2026 (второй этап кондитерки)?</p>
-      <ul><li>а) печенье и вафли;</li><li>б) торты и пирожные;</li><li>в) шоколад и карамель.</li></ul>
-    </div>
-    <p><strong>Ключ:</strong> 1а, 2б, 3б, 4б, 5б.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 49 ================= -->
-  <section class="slide">
-    <div class="slide-number">Слайд 49</div>
-    <h2>Ваши вопросы</h2>
-    <p>Открытое поле для вопросов аудитории.</p>
-    <p>Контакт лектора: кафедра, email.</p>
-    <p>Ссылка на официальные источники для самостоятельного изучения: <strong>chestnyznak.ru</strong>, <strong>zpp.rospotrebnadzor.ru</strong>.</p>
-  </section>
-
-  <!-- ================= СЛАЙД 50 ================= -->
-  <section class="slide" style="text-align:center; padding: 60px 54px;">
-    <div class="slide-number">Слайд 50</div>
-    <h2 style="font-size: 2em; margin-bottom: 20px;">Благодарю за внимание!</h2>
-    <p style="font-size: 1.2em; color: var(--synergy-blue);">Университет «Синергия» · 2026</p>
-    <p style="font-size: 1em; color: var(--text-muted);">МДК.02.03. Цифровые технологии кодирования товаров</p>
-  </section>
-
-  <!-- ================= ПОДВАЛ ================= -->
-  <div class="footer">
-    <div class="brand-mini">
-      <span>С</span>
-      Университет «Синергия» · 2026
-    </div>
-    <div>
-      Дисциплина: <b>МДК.02.03</b> · Преподаватель: <b>Югай А. В.</b>
-    </div>
-  </div>
-
 </div>
+
+<button class="nav-btn nav-prev" id="prev" aria-label="Назад">‹</button>
+<button class="nav-btn nav-next" id="next" aria-label="Вперёд">›</button>
+<div class="counter" id="counter">1 / 50</div>
+
+<script>
+  const DESIGN_W = 1600;
+  const DESIGN_H = 900;
+  const BASE_FS = 22;
+  const MIN_FS = 12;
+  const MAX_FS = 30;
+
+  const stage = document.getElementById('stage');
+  const slides = Array.from(stage.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  /* Масштаб всего слайда под экран */
+  function resizeStage() {
+    const scale = Math.min(window.innerWidth / DESIGN_W, window.innerHeight / DESIGN_H);
+    stage.style.transform = 'scale(' + scale + ')';
+  }
+
+  /* Авто-подгонка: увеличивает шрифт на «пустых», уменьшает на переполненных */
+  function fitSlide(slide) {
+    const content = slide.querySelector('.slide-content');
+    if (!content) return;
+
+    content.style.fontSize = BASE_FS + 'px';
+
+    const measure = () => {
+      const style = getComputedStyle(content);
+      const gap = parseFloat(style.gap) || 0;
+      let sum = 0;
+      const kids = content.children;
+      for (let i = 0; i < kids.length; i++) {
+        sum += kids[i].offsetHeight;
+        if (i < kids.length - 1) sum += gap;
+      }
+      return sum;
+    };
+
+    const available = () => {
+      const style = getComputedStyle(content);
+      return content.clientHeight
+        - parseFloat(style.paddingTop)
+        - parseFloat(style.paddingBottom);
+    };
+
+    /* Сначала — уменьшить, если не влезает */
+    let guard = 80;
+    while (measure() > available() && parseFloat(content.style.fontSize) > MIN_FS && guard-- > 0) {
+      content.style.fontSize = (parseFloat(content.style.fontSize) - 0.5) + 'px';
+    }
+
+    /* Затем — увеличить, если слишком много свободного места (центрированные не трогаем) */
+    if (!content.classList.contains('center')) {
+      guard = 60;
+      while (measure() < available() * 0.7 && parseFloat(content.style.fontSize) < MAX_FS && guard-- > 0) {
+        const next = parseFloat(content.style.fontSize) + 0.5;
+        content.style.fontSize = next + 'px';
+        if (measure() > available()) {
+          content.style.fontSize = (next - 0.5) + 'px';
+          break;
+        }
+      }
+    }
+  }
+
+  function show(i) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === current));
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    fitSlide(slides[current]);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) {
+      e.preventDefault(); show(current + 1);
+    } else if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) {
+      e.preventDefault(); show(current - 1);
+    } else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+  });
+
+  document.getElementById('next').addEventListener('click', () => show(current + 1));
+  document.getElementById('prev').addEventListener('click', () => show(current - 1));
+
+  stage.addEventListener('click', (e) => {
+    const rect = stage.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    show(x > rect.width / 2 ? current + 1 : current - 1);
+  });
+
+  window.addEventListener('resize', () => {
+    resizeStage();
+    fitSlide(slides[current]);
+  });
+
+  resizeStage();
+  show(0);
+</script>
 
 </body>
 </html>
